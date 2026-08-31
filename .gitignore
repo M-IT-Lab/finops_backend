@@ -1,4 +1,10 @@
 .env
+.env.*
+venv/
+projekt_ordner/
+*.pyc
+__pycache__/
+.DS_Store
 .bash_history
 .bash_logout
 .bashrc
@@ -6,9 +12,8 @@
 .lesshst
 .profile
 .cache/
-__pycache__/
 .git-credentials
 
-# Backups ignoriere
+# Backups ignorieren
 backups/
 *.sql

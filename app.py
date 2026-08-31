@@ -1,19 +1,27 @@
+import os
+
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 import mysql.connector
 
+load_dotenv()
+
 app = Flask(__name__)
+
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="finops_user",
-        password="MeinSicheresPasswort123!",
-        database="finops"
+        host=os.getenv("DB_HOST", "localhost"),
+        user=os.getenv("DB_USER", "root"),
+        password=os.getenv("DB_PASSWORD", "default_secret"),
+        database=os.getenv("DB_NAME", "finops_db")
     )
+
 
 @app.route('/')
 def index():
     return jsonify({"status": "Flask Backend läuft und ist startklar!"})
+
 
 @app.route('/alarm')
 def check_limit():
@@ -42,7 +50,7 @@ def check_limit():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-# NEU: REST-API Endpunkt für Kosten-Eingabe via HTTP POST
+
 @app.route('/api/v1/usage', methods=['POST'])
 def add_usage():
     try:
@@ -55,11 +63,11 @@ def add_usage():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        
+
         query = "INSERT INTO Bestellungen (Kunden_ID, Betrag) VALUES (%s, %s);"
         cursor.execute(query, (kunden_id, betrag))
         conn.commit()
-        
+
         cursor.close()
         conn.close()
 
@@ -67,6 +75,7 @@ def add_usage():
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
