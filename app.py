@@ -13,7 +13,7 @@ def get_db_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST", "localhost"),
         user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "default_secret"),
+        password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME", "finops_db")
     )
 
@@ -47,8 +47,8 @@ def check_limit():
             "budget_exceeded_customers": res
         })
 
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+    except Exception:
+        return jsonify({"status": "error", "message": "Ein interner Serverfehler ist aufgetreten."}), 500
 
 
 @app.route('/api/v1/usage', methods=['POST'])
@@ -73,9 +73,9 @@ def add_usage():
 
         return jsonify({"status": "success", "message": f"Kosten von {betrag} € für Kunde {kunden_id} verbucht!"}), 201
 
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+    except Exception:
+        return jsonify({"status": "error", "message": "Ein interner Serverfehler ist aufgetreten."}), 500
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
