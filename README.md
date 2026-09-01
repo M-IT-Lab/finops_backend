@@ -22,3 +22,9 @@ Die Infrastruktur wird über `systemctl` gesteuert.
 
 ## 🗄️ Datenstruktur
 Die empfangenen Daten werden sicher getrennt und strukturiert in einer normalisierten MySQL-Datenbank abgelegt, um spätere Abrufe (GET-Endpunkte) effizient zu gestalten.
+**Security & Architecture Roadmap**
+This MVP is actively being developed towards production readiness. Planned infrastructure upgrades include:
+* **API Security:** Implementation of token-based authentication and rate-limiting for the `/api/v1/usage` endpoints.
+* **Network & Transport:** Setup of a reverse proxy (Nginx) with TLS/HTTPS encryption.
+* **Secrets Management:** Migration from local `.env` files to a dedicated Secret Manager.
+* **Resilience:** Transitioning local database dumps to encrypted, off-site cloud storage.
